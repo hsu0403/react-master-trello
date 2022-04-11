@@ -1,6 +1,6 @@
-import { Droppable } from "react-beautiful-dnd";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { IToDo, toDoState } from "../atoms";
 import DragabbleCard from "./DragabbleCard";
@@ -15,6 +15,12 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+`;
+
+const TitleWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
 `;
 
 const Title = styled.h2`
@@ -49,31 +55,43 @@ const Form = styled.form`
 interface IBoardProps {
   toDos: IToDo[];
   boardId: string;
+  index: number;
 }
 
 interface IForm {
   toDo: string;
 }
 
-function Board({ toDos, boardId }: IBoardProps) {
-  const setToDos = useSetRecoilState(toDoState);
+function Board({ toDos, boardId, index }: IBoardProps) {
+  const [tasks, setTasks] = useRecoilState(toDoState);
   const { register, setValue, handleSubmit } = useForm<IForm>();
   const onValid = ({ toDo }: IForm) => {
     const newToDo = {
       id: Date.now(),
       text: toDo,
     };
-    setToDos((allBoards) => {
+    setTasks((allBoards) => {
       return {
         ...allBoards,
         [boardId]: [newToDo, ...allBoards[boardId]],
       };
     });
+    localStorage.setItem(
+      "toDos",
+      JSON.stringify({
+        ...tasks,
+        [boardId]: [newToDo, ...tasks[boardId]],
+      })
+    );
     setValue("toDo", "");
   };
   return (
     <Wrapper>
-      <Title>{boardId}</Title>
+      <TitleWrapper>
+        <div></div>
+        <Title>{boardId}</Title>
+        <span>❌</span>
+      </TitleWrapper>
       <Form onSubmit={handleSubmit(onValid)}>
         <input
           {...register("toDo", { required: true })}
