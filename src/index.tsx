@@ -35,7 +35,7 @@ footer, header, hgroup, menu, nav, section {
 body {
 	line-height: 1;
   font-family: 'Source Sans Pro', sans-serif;
-  background-color: ${(props) => props.theme.bgColor};
+  background: linear-gradient(-135deg, #c850c0, #4158d0);
   color: black;
 }
 ol, ul {

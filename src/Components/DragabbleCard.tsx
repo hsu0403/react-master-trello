@@ -5,8 +5,10 @@ import styled from "styled-components";
 const Card = styled.div<{ isDragging: boolean }>`
   border-radius: 5px;
   padding: 10px 10px;
-  background-color: ${(props) =>
-    props.isDragging ? "#74b9ff" : props.theme.cardColor};
+  background: ${(props) =>
+    props.isDragging
+      ? "linear-gradient(45deg, #bb4bb3, #c3e1ff)"
+      : "linear-gradient(45deg, #c3e1ff, #bb4bb3)"};
   margin-bottom: 5px;
   box-shadow: ${(props) =>
     props.isDragging ? "0px 2px 10px rgba(0,0,0,0.5)" : "none"};
